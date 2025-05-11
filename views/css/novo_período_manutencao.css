@@ -1,0 +1,306 @@
+/* =============================
+   ESTILOS GERAIS DA PÁGINA
+============================= */
+body {
+  background-color: #1d1f21;
+  color: #ccc;
+  font-family: Arial, sans-serif;
+}
+
+/* =============================
+ CONTAINER PRINCIPAL
+============================= */
+.container {
+  width: 800px;
+  margin: 20px auto;
+  background-color: #2a2c2f;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* =============================
+ FORMULÁRIOS
+============================= */
+.form-group {
+  margin: 10px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+input[type="text"],
+input[type="datetime-local"],
+textarea,
+select {
+  width: 100%;
+  padding: 8px;
+  background-color: #3a3d41;
+  border: 1px solid #555;
+  color: #ccc;
+  border-radius: 4px;
+}
+
+/* =============================
+ BOTÕES
+============================= */
+.button-group {
+  margin-top: 20px;
+  text-align: right;
+}
+
+button {
+  padding: 8px 16px;
+  margin-left: 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.cancel {
+  background-color: #6c757d;
+}
+
+.inline-btns {
+  margin-top: 5px;
+}
+
+.inline-btns button {
+  margin-right: 10px;
+  background-color: #4CAF50;
+}
+
+/* =============================
+ TABELA DE PERÍODOS
+============================= */
+.periods-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.periods-table th,
+.periods-table td {
+  border: 1px solid #555;
+  padding: 8px;
+  text-align: left;
+}
+
+.periods-table th {
+  background-color: #3a3d41;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px; /* espaço entre os campos */
+}
+
+.form-row .form-group.half {
+  flex: 1;
+}
+
+
+
+/* =============================
+ BOTÕES PEQUENOS (AÇÕES)
+============================= */
+.small-btn {
+  background-color: transparent;
+  color: #4aa3df;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9em;
+}
+
+/* =============================
+ ÁREA DE HOSTS / TAGS
+============================= */
+.hosts-container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border: 1px solid #444;
+  background-color: #272727;
+  padding: 4px 8px;
+  min-height: 40px;
+  width: 100%;
+}
+
+.selected-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  background-color: #464646;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-right: 4px;
+  color: white;
+  font-size: 14px;
+}
+
+.chip-remove {
+  margin-left: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #aaa;
+}
+
+/* =============================
+ INPUT DE HOSTS
+============================= */
+#hosts-input {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 8px 0;
+  min-width: 120px;
+  outline: none;
+}
+
+/* =============================
+ SUGESTÕES (AUTOCOMPLETE)
+============================= */
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  border: 1px solid #444;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  display: none;
+}
+
+.suggestion-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: white;
+}
+
+.suggestion-item:hover {
+  background-color: #444;
+}
+
+/* =============================
+ BOTÃO OPCIONAL DE SELEÇÃO
+============================= */
+.select-button {
+  background-color: #333;
+  color: white;
+  border: 1px solid #444;
+  padding: 8px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* =============================
+ TAGS INPUT CONTAINER
+============================= */
+.tags-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  background-color: #272727;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px 8px;
+  min-height: 40px;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  gap: 5px;
+}
+
+.tag-chip {
+  display: flex;
+  align-items: center;
+  background-color: #464646;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-right: 4px;
+  margin-bottom: 2px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.tag-chip .chip-remove {
+  margin-left: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #aaa;
+}
+
+#hosts-input {
+  flex: 1 1 120px;
+  min-width: 120px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 8px 0;
+  outline: none;
+  font-size: 14px;
+}
+
+#hosts-input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Repetido para manter o funcionamento conforme original */
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  border: 1px solid #444;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  display: none;
+}
+
+.suggestion-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 14px;
+}
+
+.suggestion-item:hover {
+  background-color: #444;
+}
+
+/* =============================
+ BOTÃO DE FECHAR (X)
+============================= */
+.close {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+  margin-left: 8px;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.close:hover {
+  color: #ff4d4d;
+}

@@ -1,0 +1,21 @@
+version: '3.8'
+volumes:
+  maintenance_disk:
+services:
+  mysql:
+    container_name: maintenance_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: maintenance
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: webuser
+      MYSQL_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - maintenance_disk:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+networks:
+  maintenance_net:
+    driver: bridge

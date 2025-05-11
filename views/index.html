@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Janela de Manutenção</title>
+    <link rel="stylesheet" href="CSS/novo_período_manutencao.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Nova Janela de Manutenção</h2>
+
+        <div class="form-group">
+            <label for="solicitante">Email Solicitante</label>
+            <input 
+                type="text" 
+                id="solicitante" 
+                name="solicitante" 
+                placeholder="exemplo@sercompe.com.br"
+                pattern="[a-zA-Z0-9._%+-]+@sercompe\.com\.br" 
+                required 
+                title="Informe um e-mail válido do domínio @sercompe.com.br"
+                class="form-control"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="ticket">Ticket</label>
+            <input type="text" id="ticket" 
+            placeholder="Ticket#000000000000000 — Titulo do Chamado">
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="active-since">
+                    Início do agendamento *
+                    <span title="Data e hora de início da janela de manutenção " style="cursor: help; color: #007bff;">&#x26A0;</span>
+                </label>
+                <input type="datetime-local" id="active-since" class="form-control">
+            </div>
+        
+            <div class="form-group half">
+                <label for="active-till">
+                    Fim do agendamento *
+                    <span title="Data e hora de término da janela de manutenção" style="cursor: help; color: #007bff;">&#x26A0;</span>
+                </label>
+                <input type="datetime-local" id="active-till" class="form-control">
+            </div>
+        </div>
+        
+        
+
+        <div class="form-group l" style="position: relative;">
+            
+            <label for="hosts active-til">Hosts * 
+                <span title="Escolha pelo menos um host." style="cursor: help; color: #007bff;">&#x26A0;</span> 
+            </label> 
+            <div id="hosts-tags-container" class="tags-input-container ">
+              <input type="text" id="hosts-input" placeholder="digite aqui para buscar" autocomplete="off">
+            </div>
+            <div id="suggestions-container" class="suggestions" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; z-index: 10;"></div>
+          </div>
+          
+
+        <div class="form-group">
+            <label for="description">Obervação</label>
+            <textarea id="description" rows="5"></textarea>
+        </div>
+
+        <div class="button-group">
+            <button type="button">Adicionar</button>
+            <button type="button" class="cancel">Cancelar</button>
+        </div>
+    </div>
+</body>
+<script src="script/novoperiodo.js"></script>
+
+</html>

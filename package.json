@@ -1,0 +1,39 @@
+{
+  "name": "maintenance",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "prettify": "prettier -l --write \"**/*.js\"",
+    "test": "jest",
+    "dev": "nodemon --inspect=0.0.0.0:9229 -L src/index.js"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "maintenance": "file:",
+    "nodebix": "^1.0.4",
+    "pg": "^8.11.2",
+    "sqlite3": "^5.1.2",
+    "uuid": "^9.0.0",
+    "wait-port": "^1.0.4",
+    "zabbix-api": "^0.0.1"
+  },
+  "resolutions": {
+    "ansi-regex": "5.0.1"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 4,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "jest": "^29.6.2",
+    "nodemon": "^3.0.1",
+    "prettier": "^2.7.1"
+  }
+}
