@@ -1,10 +1,19 @@
 // app.js
 const express = require('express');
 const path = require('path');
-const { searchHosts } = require('./server'); // Importar a função do server.js
 require("dotenv").config();
+const cors = require("cors");
+const bodyParser = require("body-parser");
+
 const app = express();
 const router = express.Router();
+
+const { inserirManutencao, selectJanelas, selectJanelaById } = require("./db");
+const { searchHosts } = require('./server');
+
+app.use(cors());
+app.use(bodyParser.json());
+
 
 const PORT = 5500;
 const HOST = '0.0.0.0';
@@ -88,6 +97,28 @@ app.get("/list-maintenance-id/:id", async (req, res) => {
   }
 });
 
+
+// Rota para criação de nova janela de manutenção
+app.post("/api/maintenance", async (req, res) => {
+  try {
+      const data = req.body;
+      await inserirManutencao(data);
+      res.status(200).json({ message: "Manutenção criada com sucesso" });
+  } catch (error) {
+      console.error("Erro ao criar manutenção:", error);
+      res.status(500).json({ message: error.message || "Erro interno do servidor" });
+  }
+});
+
+// Essa rota pega o nome do notebook
+
+const os = require('os');
+app.get('/name', (req, res) => {
+  // Pega o hostname da máquina que está rodando o servidor
+  const hostname = os.hostname();
+  
+  res.send(`O hostname da máquina que está acessando é: ${hostname}`);
+});
 
 // Iniciar o servidor
 app.listen(PORT, HOST, () => {

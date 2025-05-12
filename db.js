@@ -21,7 +21,8 @@ SELECT
   GROUP_CONCAT(jh.id_host) AS ids_host,
   GROUP_CONCAT(jh.nome_host) AS nomes_host,
   jm.solicitante_email,
-  jm.chamado
+  jm.chamado,
+  jm.observacao
 FROM 
   janela_manutencao AS jm
 JOIN
@@ -34,7 +35,8 @@ GROUP BY
   jm.status_janela,
   jm.tipo_manutencao,
   jm.solicitante_email,
-  jm.chamado
+  jm.chamado,
+  jm.observacao
 	;
 
     `);
@@ -43,38 +45,88 @@ GROUP BY
 
 async function selectJanelaById(janelaId) {
   const [rows] = await client.query(`
-SELECT DISTINCT
-  jm.id AS id_janela,
-  jm.inicio_agendamento,
-  jm.fim_agendamento,
-  jm.status_janela,
-  jm.tipo_manutencao,
-  GROUP_CONCAT(DISTINCT jh.id_host) AS ids_host,
-  GROUP_CONCAT(DISTINCT jh.nome_host) AS nomes_host,
-  jm.solicitante_email,
-  jm.chamado
-FROM 
-  janela_manutencao AS jm
-JOIN
-  janela_hosts AS jh ON jm.id = jh.id_janela
-WHERE
-  jm.status_janela = 'pendente'
-  AND jm.id = ?
-GROUP BY
-  jm.id,
-  jm.inicio_agendamento,
-  jm.fim_agendamento,
-  jm.status_janela,
-  jm.tipo_manutencao,
-  jm.solicitante_email,
-  jm.chamado;
-
+    SELECT DISTINCT
+      jm.id AS id_janela,
+      jm.inicio_agendamento,
+      jm.fim_agendamento,
+      jm.status_janela,
+      jm.tipo_manutencao,
+      GROUP_CONCAT(DISTINCT jh.id_host) AS ids_host,
+      GROUP_CONCAT(DISTINCT jh.nome_host) AS nomes_host,
+      jm.solicitante_email,
+      jm.chamado
+    FROM 
+      janela_manutencao AS jm
+    LEFT JOIN
+      janela_hosts AS jh ON jm.id = jh.id_janela
+    WHERE
+      jm.id = ?
+    GROUP BY
+      jm.id,
+      jm.inicio_agendamento,
+      jm.fim_agendamento,
+      jm.status_janela,
+      jm.tipo_manutencao,
+      jm.solicitante_email,
+      jm.chamado;
   `, [janelaId]);
+
+  console.log("Resultado da query:", rows); // <-- agora sim, depois da query
   return rows;
 }
 
 
+async function inserirManutencao(data) {
+  const {
+      solicitante_email,
+      chamado,
+      inicio_agendamento,
+      fim_agendamento,
+      observacao,
+      hosts // ← array de objetos: { id_host, nome_host }
+  } = data;
+
+  const conn = await client.getConnection(); // pega uma conexão da pool
+
+  try {
+      await conn.beginTransaction();
+      console.log('Observação recebida:', observacao);
+      // Inserir na tabela janela_manutencao
+      const [result] = await conn.query(`
+          INSERT INTO janela_manutencao 
+          (solicitante_email, chamado, inicio_agendamento, fim_agendamento, observacao)
+          VALUES (?, ?, ?, ?, ?)
+      `, [
+          solicitante_email,
+          chamado,
+          inicio_agendamento,
+          fim_agendamento,
+          observacao
+      ]);
+
+      const idJanela = result.insertId;
+
+      // Inserir os hosts relacionados
+      for (const host of hosts) {
+        await conn.query(`
+          INSERT INTO janela_hosts 
+          (id_janela, id_host, nome_host)
+          VALUES (?, ?, ?)
+        `, [idJanela, host.hostid, host.name]);
+      }
+
+      await conn.commit();
+  } catch (err) {
+      await conn.rollback();
+      throw err;
+  } finally {
+      conn.release();
+  }
+}
+
+
+
 
 module.exports = {
-    selectJanelas,selectJanelaById
+    selectJanelas,selectJanelaById,inserirManutencao
 };

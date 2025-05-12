@@ -110,3 +110,44 @@ document.addEventListener('click', (event) => {
     suggestionsContainer.style.display = 'none';
   }
 });
+
+
+// Envia a solicitação via POST para o banc
+document.querySelector('.button-group button').addEventListener('click', async () => {
+  const solicitante_email = document.getElementById('solicitante').value;
+  const chamado = document.getElementById('ticket').value;
+  const inicio_agendamento = document.getElementById('active-since').value;
+  const fim_agendamento = document.getElementById('active-till').value;
+  const observacao = document.getElementById('description').value;
+
+  const hosts = selectedHosts.map(h => ({
+    hostid: h.hostid,
+    name: h.name
+  }));
+
+  const payload = {
+    solicitante_email,
+    chamado,
+    inicio_agendamento,
+    fim_agendamento,
+    observacao,
+    hosts
+  };
+
+  try {
+    const response = await fetch('http://localhost:5500/api/maintenance', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+    alert(result.message);
+  } catch (error) {
+    console.error('Erro ao enviar manutenção:', error);
+    alert('Erro ao criar manutenção.');
+  }
+});
+
