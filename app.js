@@ -10,6 +10,7 @@ const PORT = 5500;
 const HOST = '0.0.0.0';
 
 const viewsPath = path.join(__dirname, 'public');
+app.set('view engine', 'ejs');
 
 
 app.use(express.static(viewsPath));
@@ -43,16 +44,50 @@ router.get("/search-hosts", async (req, res) => {
   }
 });
 
-
+// Rota para listar todas as janelas de manutenção
 app.get("/list-maintenance", async (req, res) => {
   try {
+      // Chama a função do banco de dados para buscar todas as janelas
       const results = await db.selectJanelas();
+
+      // Retorna os resultados em formato JSON
       res.json(results);
   } catch (error) {
+      // Em caso de erro, exibe a mensagem no console
       console.error("Erro ao buscar janelas:", error);
+
+      // Retorna erro 500 com mensagem genérica
       res.status(500).json({ error: "Erro interno do servidor" });
   }
 });
+
+
+// Rota para listar uma janela de manutenção específica por ID
+
+app.get("/list-maintenance-id/:id", async (req, res) => {
+  try {
+    // Extrai o parâmetro ID da URL
+    const { id } = req.params;
+
+    // Busca a janela no banco de dados com base no ID fornecido
+    const results = await db.selectJanelaById(id);
+
+    // Se não encontrar nenhuma janela com o ID, retorna erro 404
+    if (results.length === 0) {
+      return res.status(404).json({ message: "Janela não encontrada." });
+    }
+
+    // Retorna os dados da janela encontrada em formato JSON
+    res.json(results);
+  } catch (error) {
+    // Em caso de erro, exibe a mensagem no console
+    console.error("Erro ao buscar janela por ID:", error);
+
+    // Retorna erro 500 com mensagem genérica
+    res.status(500).json({ error: "Erro interno do servidor." });
+  }
+});
+
 
 // Iniciar o servidor
 app.listen(PORT, HOST, () => {

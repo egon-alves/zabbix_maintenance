@@ -30,7 +30,7 @@
 ├── server.js             # Inicialização do servidor Express
 ├── server2.js            # Versão alternativa do servidor (em teste)
 ├── package.json          # Dependências do Node.js
-├── views/                # Páginas HTML da aplicação
+├── public/                # Páginas HTML da aplicação
 └── docker/               # (em breve) arquivos para containerização
 ````
 

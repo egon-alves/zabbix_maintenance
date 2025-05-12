@@ -76,5 +76,5 @@ GROUP BY
 
 
 module.exports = {
-    selectJanelas
+    selectJanelas,selectJanelaById
 };
