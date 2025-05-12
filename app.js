@@ -1,6 +1,7 @@
 // app.js
 const express = require('express');
 const path = require('path');
+const fetch = require('node-fetch');
 require("dotenv").config();
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -103,6 +104,13 @@ app.post("/api/maintenance", async (req, res) => {
   try {
       const data = req.body;
       await inserirManutencao(data);
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: `Nova manutenção criada por ${solicitante_email}\nChamado: ${chamado}\nInício: ${inicio_agendamento}\nFim: ${fim_agendamento}\nObservação: ${observacao}`
+        })
+      });
       res.status(200).json({ message: "Manutenção criada com sucesso" });
   } catch (error) {
       console.error("Erro ao criar manutenção:", error);
@@ -119,6 +127,8 @@ app.get('/name', (req, res) => {
   
   res.send(`O hostname da máquina que está acessando é: ${hostname}`);
 });
+
+
 
 // Iniciar o servidor
 app.listen(PORT, HOST, () => {

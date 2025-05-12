@@ -144,10 +144,22 @@ document.querySelector('.button-group button').addEventListener('click', async (
     });
 
     const result = await response.json();
+    
     alert(result.message);
+        // 2. Envia para o Teams
+        await fetch('http://localhost:3000/api/enviar-para-teams', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            text: `Nova manutenção criada por ${solicitante_email}\nChamado: ${chamado}\nInício: ${inicio_agendamento}\nFim: ${fim_agendamento}\nObservação: ${observacao}`
+          })
+        });
+
+
   } catch (error) {
     console.error('Erro ao enviar manutenção:', error);
     alert('Erro ao criar manutenção.');
   }
 });
-
