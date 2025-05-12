@@ -2,17 +2,19 @@
 const express = require('express');
 const path = require('path');
 const { searchHosts } = require('./server'); // Importar a função do server.js
-
+require("dotenv").config();
 const app = express();
 const router = express.Router();
 
 const PORT = 5500;
 const HOST = '0.0.0.0';
 
-const viewsPath = path.join(__dirname, 'views');
+const viewsPath = path.join(__dirname, 'public');
+
 
 app.use(express.static(viewsPath));
 app.use("/", router);
+const db = require("./db");
 
 // Log simples de requisições
 router.use(function (req, res, next) {
@@ -41,6 +43,16 @@ router.get("/search-hosts", async (req, res) => {
   }
 });
 
+
+app.get("/list-maintenance", async (req, res) => {
+  try {
+      const results = await db.selectJanelas();
+      res.json(results);
+  } catch (error) {
+      console.error("Erro ao buscar janelas:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
 // Iniciar o servidor
 app.listen(PORT, HOST, () => {
   console.log(`Servidor rodando em http://${HOST}:${PORT}`);

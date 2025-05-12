@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Janelas de Manutenção</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      font-family: "Segoe UI", sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #ffffff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #333;
+      color: #f0f0f0;
+    }
+
+    td {
+      background-color: #252525;
+    }
+
+    .detalhes {
+      display: none;
+      background-color: #1c1c1c;
+    }
+
+    .detalhes.visivel {
+      display: table-row;
+    }
+
+    .botao-detalhes {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .botao-detalhes:hover {
+      background-color: #0056b3;
+    }
+    .botao-acao {
+  padding: 6px 14px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.botao-acao.aceitar {
+  background-color: #28a745;
+  color: white;
+}
+
+.botao-acao.aceitar:hover {
+  background-color: #218838;
+}
+
+.botao-acao.recusar {
+  background-color: #dc3545;
+  color: white;
+}
+
+.botao-acao.recusar:hover {
+  background-color: #c82333;
+}
+
+  </style>
+</head>
+<body>
+  <h1>Janelas de Manutenção</h1>
+  <table id="tabela-janelas">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Chamado</th>
+        <th>Solicitante</th>
+        <th>Início</th>
+        <th>Fim</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    fetch("/list-maintenance")
+      .then((response) => response.json())
+      .then((janelas) => {
+        const tbody = document.querySelector("#tabela-janelas tbody");
+
+        janelas.forEach((janela, index) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${janela.id_janela}</td>
+            <td>${janela.chamado || "-"}</td>
+            <td>${janela.solicitante_email || "-"}</td>
+            <td>${new Date(janela.inicio_agendamento).toLocaleString()}</td>
+            <td>${new Date(janela.fim_agendamento).toLocaleString()}</td>
+            <td><button class="botao-detalhes" data-index="${index}">Ver mais</button></td>
+          `;
+
+          const trDetalhes = document.createElement("tr");
+          trDetalhes.classList.add("detalhes");
+          trDetalhes.innerHTML = `
+          <td colspan="6">
+            <strong>Status:</strong> ${janela.status_janela || "-"}<br>
+            <strong>Tipo:</strong> ${janela.tipo_manutencao || "-"}<br>
+            <strong>Hosts:</strong> ${janela.nomes_host || "-"}<br>
+            <strong>Observação:</strong> ${janela.observacao || "-"}<br><br>
+            <button class="botao-acao aceitar" data-id="${janela.id_janela}">Aceitar</button>
+            <button class="botao-acao recusar" data-id="${janela.id_janela}">Recusar</button>
+          </td>
+          `;
+
+          tbody.appendChild(tr);
+          tbody.appendChild(trDetalhes);
+        });
+
+        document.querySelectorAll(".botao-detalhes").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const index = btn.getAttribute("data-index");
+            const detalhesRow = document.querySelectorAll(".detalhes")[index];
+            const isVisible = detalhesRow.classList.contains("visivel");
+            detalhesRow.classList.toggle("visivel");
+            btn.textContent = isVisible ? "Ver mais" : "Ver menos";
+          });
+        });
+      })
+      .catch((error) => {
+        console.error("Erro ao carregar janelas:", error);
+      });
+      document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("botao-acao")) {
+    const id = e.target.getAttribute("data-id");
+    const acao = e.target.classList.contains("aceitar") ? "aceitar" : "recusar";
+
+    fetch(`/janela/${id}/${acao}`, {
+      method: "POST",
+    })
+      .then((res) => {
+        if (res.ok) {
+          alert(`Janela ${acao} com sucesso!`);
+          // Aqui você pode atualizar a tabela ou recarregar os dados se quiser
+        } else {
+          alert("Erro ao processar a solicitação.");
+        }
+      })
+      .catch((err) => {
+        console.error("Erro na requisição:", err);
+        alert("Erro de conexão.");
+      });
+  }
+});
+  </script>
+</body>
+</html>
