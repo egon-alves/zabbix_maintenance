@@ -41,7 +41,40 @@ GROUP BY
     return rows;
 }
 
+async function selectJanelaById(janelaId) {
+  const [rows] = await client.query(`
+SELECT DISTINCT
+  jm.id AS id_janela,
+  jm.inicio_agendamento,
+  jm.fim_agendamento,
+  jm.status_janela,
+  jm.tipo_manutencao,
+  GROUP_CONCAT(DISTINCT jh.id_host) AS ids_host,
+  GROUP_CONCAT(DISTINCT jh.nome_host) AS nomes_host,
+  jm.solicitante_email,
+  jm.chamado
+FROM 
+  janela_manutencao AS jm
+JOIN
+  janela_hosts AS jh ON jm.id = jh.id_janela
+WHERE
+  jm.status_janela = 'pendente'
+  AND jm.id = ?
+GROUP BY
+  jm.id,
+  jm.inicio_agendamento,
+  jm.fim_agendamento,
+  jm.status_janela,
+  jm.tipo_manutencao,
+  jm.solicitante_email,
+  jm.chamado;
+
+  `, [janelaId]);
+  return rows;
+}
+
+
 
 module.exports = {
-    selectJanelas
+    selectJanelas,selectJanelaById
 };

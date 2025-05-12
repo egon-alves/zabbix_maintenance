@@ -2,95 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="CSS/list-maintenance.css">
   <title>Janelas de Manutenção</title>
-  <style>
-    body {
-      background-color: #1e1e1e;
-      color: #f0f0f0;
-      font-family: "Segoe UI", sans-serif;
-      padding: 20px;
-    }
 
-    h1 {
-      color: #ffffff;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      background-color: #2a2a2a;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    th, td {
-      border: 1px solid #444;
-      padding: 10px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #333;
-      color: #f0f0f0;
-    }
-
-    td {
-      background-color: #252525;
-    }
-
-    .detalhes {
-      display: none;
-      background-color: #1c1c1c;
-    }
-
-    .detalhes.visivel {
-      display: table-row;
-    }
-
-    .botao-detalhes {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      font-size: 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .botao-detalhes:hover {
-      background-color: #0056b3;
-    }
-    .botao-acao {
-  padding: 6px 14px;
-  margin-right: 8px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.botao-acao.aceitar {
-  background-color: #28a745;
-  color: white;
-}
-
-.botao-acao.aceitar:hover {
-  background-color: #218838;
-}
-
-.botao-acao.recusar {
-  background-color: #dc3545;
-  color: white;
-}
-
-.botao-acao.recusar:hover {
-  background-color: #c82333;
-}
-
-  </style>
 </head>
 <body>
   <h1>Janelas de Manutenção</h1>
@@ -107,7 +21,7 @@
     </thead>
     <tbody></tbody>
   </table>
-
+  <script src="script/list-maintenance.js"></script>
   <script>
     fetch("/list-maintenance")
       .then((response) => response.json())
