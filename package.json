@@ -17,7 +17,7 @@
     "express": "^4.21.2",
     "maintenance": "file:",
     "mysql2": "^3.14.1",
-    "node-fetch": "^3.3.2",
+    "node-fetch": "^2.7.0",
     "nodebix": "^1.0.4",
     "pg": "^8.11.2",
     "sqlite3": "^5.1.2",
