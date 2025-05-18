@@ -1,10 +1,10 @@
 {
   "name": "maintenance",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.js",
   "license": "MIT",
   "scripts": {
-    "start": "npx nodemon app",
+    "start": "npx nodemon src/app",
     "prettify": "prettier -l --write \"**/*.js\"",
     "test": "jest",
     "dev": "nodemon --inspect=0.0.0.0:9229 -L src/index.js"

@@ -1,6 +1,7 @@
-// server.js
+// src/services/zabbix.js
 const axios = require('axios');
-require('dotenv').config({ path: './config/pass.env' });
+require('dotenv').config({ path: require('path').join(__dirname, '..', 'config', 'pass.env') });
+
 const ZABBIX_URL = process.env.ZABBIX_URL;
 const ZABBIX_USER = process.env.ZABBIX_USER;
 const ZABBIX_PASSWORD = process.env.ZABBIX_PASSWORD;

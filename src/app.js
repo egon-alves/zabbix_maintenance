@@ -5,14 +5,13 @@ const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const os = require('os');
-const { searchHosts } = require('./server');
-const db = require('./db');
+const db = require('../db');
 
 // Configurações e middlewares
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 app.set('view engine', 'ejs');
 // configuração do host 
 
@@ -27,7 +26,7 @@ app.use((req, res, next) => {
 
 // Rotas
 app.get('/maintenance/new', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'new-maintenance.html'));
+  res.sendFile(path.join(__dirname, '..', 'public', 'new-maintenance.html'));
 });
 
 app.get('/maintenance/list', async (req, res, next) => {
@@ -46,17 +45,10 @@ app.get('/maintenance/list', async (req, res, next) => {
 const maintenanceRoutes = require('./routes/maintenance');
 app.use(maintenanceRoutes);
 
+const searchHostRoutes = require('./routes/search_host');
+app.use('/', searchHostRoutes);
 
-app.get('/search-hosts', async (req, res, next) => {
-  try {
-    const query = req.query.query || '';
-    if (!query) return res.status(400).json({ error: 'Query is required' });
-    const hosts = await searchHosts(query);
-    res.json(hosts);
-  } catch (error) {
-    next(error);
-  }
-});
+
 
 app.get('/name', (req, res) => {
   res.send(`O hostname da máquina que está acessando é: ${os.hostname()}`);
