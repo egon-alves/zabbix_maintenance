@@ -1,8 +1,8 @@
 const express = require('express');
-const router = express.Router();
+const app = express.Router();
 const { inserirManutencao } = require('../db');
 
-router.post('/api/maintenance/new-maintenance', async (req, res) => {
+app.post('/api/maintenance/new-maintenance', async (req, res) => {
   const {
     solicitante_email,
     chamado,
@@ -11,6 +11,7 @@ router.post('/api/maintenance/new-maintenance', async (req, res) => {
     observacao,
     hosts
   } = req.body;
+  console.log('Dados recebidos no backend:', req.body);
 
   if (!solicitante_email || !inicio_agendamento || !fim_agendamento || !Array.isArray(hosts)) {
     return res.status(400).json({ error: 'Dados obrigatórios faltando.' });
@@ -33,4 +34,4 @@ router.post('/api/maintenance/new-maintenance', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = app;

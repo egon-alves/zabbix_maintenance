@@ -2,6 +2,8 @@
 const inputElement = document.getElementById('hosts-input');
 const suggestionsContainer = document.getElementById('suggestions-container');
 const tagsContainer = document.getElementById('hosts-tags-container');
+const form = document.getElementById('janela-form');
+const submitButton = document.getElementById('submitBtn');
 
 // Lista que armazenará os hosts selecionados
 let selectedHosts = [];
@@ -110,5 +112,73 @@ document.addEventListener('click', (event) => {
     suggestionsContainer.style.display = 'none';
   }
 });
+
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault(); // Impede o envio tradicional do form
+
+  // Coleta os dados do formulário
+  const solicitante_email = document.getElementById('solicitante').value.trim();
+  const chamado = document.getElementById('ticket').value.trim();
+  const inicio = document.getElementById('active-since').value;
+  const fim = document.getElementById('active-till').value;
+  const observacao = document.getElementById('description').value.trim();
+
+  // Valida se há pelo menos um host selecionado
+  if (selectedHosts.length === 0) {
+    alert('Por favor, selecione ao menos um host.');
+    return;
+  }
+
+  // Formata data para o formato esperado: "YYYY-MM-DD HH:mm:ss"
+  function formatDateTime(datetime) {
+    const [date, time] = datetime.split('T');
+    return `${date} ${time}:00`;
+  }
+
+  const inicio_agendamento = formatDateTime(inicio);
+  const fim_agendamento = formatDateTime(fim);
+
+  // Monta a lista de hosts no formato esperado
+  const hosts = selectedHosts.map(h => ({
+    id_host: parseInt(h.hostid),
+    nome_host: h.name
+  }));
+
+  // Monta o corpo da requisição
+  const data = {
+    solicitante_email,
+    chamado,
+    inicio_agendamento,
+    fim_agendamento,
+    observacao,
+    hosts
+  };
+
+  try {
+    const response = await fetch('/api/maintenance/new-maintenance', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      alert('Janela de manutenção criada com sucesso!');
+      form.reset();
+      selectedHosts = [];
+      renderTags();
+    } else {
+      const error = await response.text();
+      console.error('Erro da API:', error);
+      alert('Erro ao criar a janela. Verifique os dados e tente novamente.');
+    }
+  } catch (error) {
+    console.error('Erro na requisição:', error);
+    alert('Falha na comunicação com o servidor.');
+  }
+});
+
 
 
