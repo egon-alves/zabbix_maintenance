@@ -110,3 +110,5 @@ document.addEventListener('click', (event) => {
     suggestionsContainer.style.display = 'none';
   }
 });
+
+

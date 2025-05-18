@@ -75,58 +75,54 @@ async function selectJanelaById(janelaId) {
   return rows;
 }
 
-
 async function inserirManutencao(data) {
   const {
+    solicitante_email,
+    chamado,
+    inicio_agendamento,
+    fim_agendamento,
+    observacao,
+    hosts
+  } = data;
+
+  const conn = await client.getConnection();
+
+  try {
+    await conn.beginTransaction();
+
+    const [result] = await conn.query(`
+      INSERT INTO janela_manutencao 
+      (solicitante_email, chamado, inicio_agendamento, fim_agendamento, observacao)
+      VALUES (?, ?, ?, ?, ?)
+    `, [
       solicitante_email,
       chamado,
       inicio_agendamento,
       fim_agendamento,
-      observacao,
-      hosts // ← array de objetos: { id_host, nome_host }
-  } = data;
+      observacao
+    ]);
 
-  const conn = await client.getConnection(); // pega uma conexão da pool
+    const idJanela = result.insertId;
 
-  try {
-      await conn.beginTransaction();
-      console.log('Observação recebida:', observacao);
-      // Inserir na tabela janela_manutencao
-      const [result] = await conn.query(`
-          INSERT INTO janela_manutencao 
-          (solicitante_email, chamado, inicio_agendamento, fim_agendamento, observacao)
-          VALUES (?, ?, ?, ?, ?)
-      `, [
-          solicitante_email,
-          chamado,
-          inicio_agendamento,
-          fim_agendamento,
-          observacao
-      ]);
+    for (const host of hosts) {
+      await conn.query(`
+        INSERT INTO janela_hosts 
+        (id_janela, id_host, nome_host)
+        VALUES (?, ?, ?)
+      `, [idJanela, host.id_host, host.nome_host]); // <- Certifique-se do nome correto aqui
+    }
 
-      const idJanela = result.insertId;
-
-      // Inserir os hosts relacionados
-      for (const host of hosts) {
-        await conn.query(`
-          INSERT INTO janela_hosts 
-          (id_janela, id_host, nome_host)
-          VALUES (?, ?, ?)
-        `, [idJanela, host.hostid, host.name]);
-      }
-
-      await conn.commit();
+    await conn.commit();
+    return { insertId: idJanela };
   } catch (err) {
-      await conn.rollback();
-      throw err;
+    await conn.rollback();
+    throw err;
   } finally {
-      conn.release();
+    conn.release();
   }
 }
 
 
-
-
 module.exports = {
-    selectJanelas,selectJanelaById,inserirManutencao
+    selectJanelas,selectJanelaById,inserirManutencao, client 
 };

@@ -20,7 +20,7 @@ fetch("/list-maintenance")
     <td colspan="6">
       <strong>Status:</strong> ${janela.status_janela || "-"}<br>
       <strong>Tipo:</strong> ${janela.tipo_manutencao || "-"}<br>
-      <strong>Hosts:</strong> ${janela.nomes_host || "-"}<br>
+      <strong>Hosts:</strong> ${janela.nomes_host || " - "}<br>
       <strong>Observação:</strong> ${janela.observacao || "-"}<br><br>
       <button class="botao-acao aceitar" data-id="${janela.id_janela}">Aceitar</button>
       <button class="botao-acao recusar" data-id="${janela.id_janela}">Recusar</button>
