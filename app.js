@@ -26,11 +26,11 @@ app.use((req, res, next) => {
 });
 
 // Rotas
-app.get('/new-maintenance', (req, res) => {
+app.get('/maintenance/new', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'new-maintenance.html'));
 });
 
-app.get('/list-maintenance', async (req, res, next) => {
+app.get('/maintenance/list', async (req, res, next) => {
   try {
     const results = await db.selectJanelas();
     res.json(results);

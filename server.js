@@ -1,19 +1,9 @@
 // server.js
 const axios = require('axios');
-
-
-
 require('dotenv').config({ path: './config/pass.env' });
 const ZABBIX_URL = process.env.ZABBIX_URL;
 const ZABBIX_USER = process.env.ZABBIX_USER;
 const ZABBIX_PASSWORD = process.env.ZABBIX_PASSWORD;
-
-/*
-const ZABBIX_URL = 'http://192.168.1.33:8181/api_jsonrpc.php';
-const ZABBIX_USER = 'Admin';
-const ZABBIX_PASSWORD = 'zabbix';
-*/
-
 
 let authToken = null;
 
@@ -77,4 +67,3 @@ async function searchHosts(query) {
 module.exports = {
   searchHosts
 };
-

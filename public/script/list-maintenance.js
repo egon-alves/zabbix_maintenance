@@ -1,4 +1,4 @@
-fetch("/list-maintenance")
+fetch("/maintenance/list")
 .then((response) => response.json())
 .then((janelas) => {
   const tbody = document.querySelector("#tabela-janelas tbody");
