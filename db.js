@@ -122,7 +122,29 @@ async function inserirManutencao(data) {
   }
 }
 
+async function updateStatusJanela(janelaId, novoStatus) {
+  const updateQuery = `
+    UPDATE janela_manutencao
+    SET status_janela = ?
+    WHERE id = ?;
+  `;
+
+  // Atualiza o status
+  await client.query(updateQuery, [novoStatus, janelaId]);
+
+  // Busca os dados atualizados
+  const [rows] = await client.query(
+    `SELECT * FROM janela_manutencao WHERE id = ?;`,
+    [janelaId]
+  );
+
+  console.log("Resultado da query:", rows);
+  return rows;
+}
+
+
+
 
 module.exports = {
-    selectJanelas,selectJanelaById,inserirManutencao, client 
+    selectJanelas,selectJanelaById,inserirManutencao,updateStatusJanela, client 
 };

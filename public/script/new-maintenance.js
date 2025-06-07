@@ -166,6 +166,7 @@ form.addEventListener('submit', async (event) => {
 
     if (response.ok) {
       alert('Janela de manutenção criada com sucesso!');
+      await enviarMensagemTeams(solicitante_email, chamado, inicio_agendamento, fim_agendamento, observacao);
       form.reset();
       selectedHosts = [];
       renderTags();
@@ -182,3 +183,104 @@ form.addEventListener('submit', async (event) => {
 
 
 
+// Função para buscar e renderizar sugestões
+async function searchHosts(query) {
+  try {
+    // Faz a requisição para buscar hosts que correspondam à pesquisa
+    const response = await fetch(`/search-hosts?query=${encodeURIComponent(query)}`);
+    const hosts = await response.json();
+
+    if (hosts.length > 0) {
+      // Filtra os hosts que ainda não foram selecionados
+      const availableHosts = hosts.filter(host =>
+        !selectedHosts.some(selected => selected.hostid === host.hostid)
+      );
+
+      if (availableHosts.length > 0) {
+        // Monta as sugestões com base nos hosts disponíveis
+        suggestionsContainer.innerHTML = availableHosts.map(host => 
+          `<div class="suggestion-item" data-hostid="${host.hostid}" data-name="${host.name}">${host.name}</div>`
+        ).join('');
+        suggestionsContainer.style.display = 'block';
+
+        // Adiciona comportamento de clique em cada sugestão
+        document.querySelectorAll('.suggestion-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const host = {
+              hostid: item.getAttribute('data-hostid'),
+              name: item.getAttribute('data-name')
+            };
+
+            // Evita selecionar o mesmo host mais de uma vez
+            if (!selectedHosts.some(h => h.hostid === host.hostid)) {
+              selectedHosts.push(host);
+              renderTags(); // Atualiza a exibição das tags
+            }
+
+            // Limpa o campo de input e esconde as sugestões
+            inputElement.value = '';
+            suggestionsContainer.style.display = 'none';
+          });
+        });
+      } else {
+        // Se não houver hosts disponíveis, esconde o container de sugestões
+        suggestionsContainer.style.display = 'none';
+      }
+    } else {
+      // Se a resposta da API vier vazia, esconde as sugestões
+      suggestionsContainer.style.display = 'none';
+    }
+  } catch (error) {
+    console.error('Erro ao buscar hosts:', error);
+    suggestionsContainer.style.display = 'none';
+  }
+}
+
+// Evento: quando o usuário digitar no input
+inputElement.addEventListener('input', (event) => {
+  const query = event.target.value.trim();
+
+  if (query.length >= 3) {
+    searchHosts(query);
+  } else {
+    suggestionsContainer.style.display = 'none';
+  }
+});
+
+// Esconde o container de sugestões se o clique ocorrer fora do componente
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('.form-group')) {
+    suggestionsContainer.style.display = 'none';
+  }
+});
+
+
+
+
+
+async function enviarMensagemTeams(solicitante_email, chamado, inicio_agendamento, fim_agendamento, observacao) {
+  const mensagem = {
+    text: `🛠️ **Nova manutenção criada**
+👤 **Solicitante:** ${solicitante_email}
+📄 **Chamado:** ${chamado}
+⏰ **Início:** ${inicio_agendamento}
+⏳ **Fim:** ${fim_agendamento}
+📝 **Observação:** ${observacao || 'Não informado'}`
+  };
+
+  try {
+    const response = await fetch('https://sercompecombr.webhook.office.com/webhookb2/aedd2e3f-d6bf-455e-a3f4-e80088f890f7@d57e32fb-6c5f-414c-9811-cb2164a80faa/IncomingWebhook/e86ef06cbe914d789ec45067493cb7a0/04878ae3-1c87-40bd-8b43-9da040811242/V20cbdQolI5hP2heWrDf2ZKrrK2vI9k5iq92M-I1JKk1w1', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(mensagem)
+    });
+
+    if (!response.ok) {
+      console.error('Erro ao enviar mensagem para o Teams:', await response.text());
+    }
+  } catch (error) {
+    console.error('Falha na requisição ao Teams:', error);
+  }
+}

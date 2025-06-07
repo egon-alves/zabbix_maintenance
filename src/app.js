@@ -38,8 +38,22 @@ app.get('/maintenance/list', async (req, res, next) => {
   }
 });
 
-// chamando as routas
 
+app.get('/api/maintenance/list/:janelaId', async (req, res, next) => {
+  const { janelaId } = req.params;
+  const results = await db.selectJanelaById(janelaId);
+  res.json(results);
+});
+
+// Servir arquivos estáticos da pasta public
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// Rota para servir a página HTML
+app.get('/maintenance/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'details-maintenance.html'));
+});
+
+// chamando as routas
 
 
 const maintenanceRoutes = require('./routes/maintenance');

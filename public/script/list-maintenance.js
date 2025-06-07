@@ -44,25 +44,31 @@ fetch("/maintenance/list")
 .catch((error) => {
   console.error("Erro ao carregar janelas:", error);
 });
+
+
 document.addEventListener("click", function (e) {
 if (e.target.classList.contains("botao-acao")) {
 const id = e.target.getAttribute("data-id");
 const acao = e.target.classList.contains("aceitar") ? "aceitar" : "recusar";
 
-fetch(`/janela/${id}/${acao}`, {
-method: "POST",
+
+fetch(`/api/maintenance/list/${id}/${acao}`, {
+  method: "POST",
 })
 .then((res) => {
   if (res.ok) {
-    alert(`Janela ${acao} com sucesso!`);
-    // Aqui você pode atualizar a tabela ou recarregar os dados se quiser
+    alert(`Janela ${acao} com sucesso.`);
+    // Recarrega a página ou atualiza os dados, se necessário
+    location.reload(); 
   } else {
-    alert("Erro ao processar a solicitação.");
+    res.json().then(data => {
+      alert(`Erro: ${data.error || "Erro ao processar a solicitação"}`);
+    });
   }
 })
 .catch((err) => {
   console.error("Erro na requisição:", err);
-  alert("Erro de conexão.");
+  alert("Erro de conexão com o servidor.");
 });
 }
 });

@@ -64,7 +64,57 @@ async function searchHosts(query) {
   }
 }
 
+// Essa função já pode estar no seu arquivo de conexão Zabbix
+async function createMaintenanceZabbix(janela) {
+  const token = await authenticateZabbix();
+  const {
+    inicio_agendamento,
+    fim_agendamento,
+    solicitante_email,
+    chamado,
+    ids_host,
+    observacao
+  } = janela;
+
+  // Calcular período em segundos (duração da manutenção)
+  const inicio = new Date(inicio_agendamento).getTime() / 1000;
+  const fim = new Date(fim_agendamento).getTime() / 1000;
+  const periodo = Math.floor(fim - inicio);
+
+  // Montar payload da API Zabbix
+  const payload = {
+    jsonrpc: '2.0',
+    method: 'maintenance.create',
+    params: {
+      name: `Auto: ${chamado}`,
+      active_since: inicio,
+      active_till: fim,
+      tags_evaltype: 0,
+      description: `Solicitante ${solicitante_email} : ${observacao}`,
+      hostids: ids_host.split(','),
+      timeperiods: [
+        {
+          timeperiod_type: 0,
+          period: periodo,
+        }
+      ]
+    },
+    auth: token,
+    id: 1,
+  };
+
+  // Enviar requisição para API do Zabbix
+  const response = await axios.post(ZABBIX_URL, payload, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  return response.data;
+}
+
+
+
+
 // Exportar as funções
 module.exports = {
-  searchHosts
+  searchHosts,createMaintenanceZabbix
 };
