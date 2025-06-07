@@ -253,34 +253,3 @@ document.addEventListener('click', (event) => {
     suggestionsContainer.style.display = 'none';
   }
 });
-
-
-
-
-
-async function enviarMensagemTeams(solicitante_email, chamado, inicio_agendamento, fim_agendamento, observacao) {
-  const mensagem = {
-    text: `🛠️ **Nova manutenção criada**
-👤 **Solicitante:** ${solicitante_email}
-📄 **Chamado:** ${chamado}
-⏰ **Início:** ${inicio_agendamento}
-⏳ **Fim:** ${fim_agendamento}
-📝 **Observação:** ${observacao || 'Não informado'}`
-  };
-
-  try {
-    const response = await fetch('https://sercompecombr.webhook.office.com/webhookb2/aedd2e3f-d6bf-455e-a3f4-e80088f890f7@d57e32fb-6c5f-414c-9811-cb2164a80faa/IncomingWebhook/e86ef06cbe914d789ec45067493cb7a0/04878ae3-1c87-40bd-8b43-9da040811242/V20cbdQolI5hP2heWrDf2ZKrrK2vI9k5iq92M-I1JKk1w1', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(mensagem)
-    });
-
-    if (!response.ok) {
-      console.error('Erro ao enviar mensagem para o Teams:', await response.text());
-    }
-  } catch (error) {
-    console.error('Falha na requisição ao Teams:', error);
-  }
-}

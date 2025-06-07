@@ -3,6 +3,7 @@ const app = express.Router();
 const { inserirManutencao, updateStatusJanela} = require('../../db');
 const { createMaintenanceZabbix } = require('../services/zabbix');
 require('dotenv').config();
+const { enviarMensagemTeams } = require('./teams');
 
 
 app.post('/api/maintenance/new-maintenance', async (req, res) => {
@@ -15,12 +16,15 @@ app.post('/api/maintenance/new-maintenance', async (req, res) => {
     hosts
   } = req.body;
   console.log('Dados recebidos no backend:', req.body);
+  await enviarMensagemTeams(solicitante_email, chamado, inicio_agendamento, fim_agendamento, observacao);
 
   if (!solicitante_email || !inicio_agendamento || !fim_agendamento || !Array.isArray(hosts)) {
     return res.status(400).json({ error: 'Dados obrigatórios faltando.' });
   }
 
   try {
+    
+
     const result = await inserirManutencao({
       solicitante_email,
       chamado,
@@ -29,6 +33,9 @@ app.post('/api/maintenance/new-maintenance', async (req, res) => {
       observacao,
       hosts
     });
+    
+    
+
 
     res.status(201).json({ message: 'Manutenção criada com sucesso', id: result.insertId });
   } catch (err) {
@@ -63,6 +70,8 @@ app.post('/api/maintenance/list/:janelaId/aceitar', async (req, res) => {
     // Atualiza o status da janela para aceito    
     await updateStatusJanela(janelaId, 'aceito');  
     const resultado = await createMaintenanceZabbix(janela);
+
+    
 
     res.json({ sucesso: true, resultado });
   } catch (err) {
