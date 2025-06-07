@@ -1,20 +1,8 @@
-/* =============================
-   ESTILOS GERAIS DA PÁGINA
-============================= */
-body {
-  background-color: #1d1f21;
-  color: #ccc;
-  font-family: Arial, sans-serif;
-}
-
+@import url('./global.css');
 /* =============================
  CONTAINER PRINCIPAL
 ============================= */
 .container {
-  width: 800px;
-  margin: 20px auto;
-  background-color: #2a2c2f;
-  padding: 20px;
   border-radius: 8px;
 }
 
@@ -28,7 +16,11 @@ body {
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  color: #fff;
+  color:  rgb(0, 0, 0);
+}
+
+.form-control {
+  color:  rgb(0, 0, 0);
 }
 
 input[type="text"],
@@ -37,7 +29,7 @@ textarea,
 select {
   width: 100%;
   padding: 8px;
-  background-color: #3a3d41;
+  background-color: #f8fafc;
   border: 1px solid #555;
   color: #ccc;
   border-radius: 4px;
@@ -52,17 +44,17 @@ select {
 }
 
 button {
-  padding: 8px 16px;
+  padding: 12px 100px;
   margin-left: 10px;
-  background-color: #007bff;
+  background-color: #28a745;
   border: none;
-  color: white;
-  border-radius: 4px;
+  color: back;
+  border-radius: 10px;
   cursor: pointer;
 }
 
 button.cancel {
-  background-color: #6c757d;
+  background-color: #c82333;
 }
 
 .inline-btns {
@@ -78,7 +70,7 @@ button.cancel {
  TABELA DE PERÍODOS
 ============================= */
 .periods-table {
-  width: 100%;
+  width: 10%;
   border-collapse: collapse;
   margin-top: 10px;
 }
@@ -118,15 +110,15 @@ button.cancel {
 }
 
 /* =============================
- ÁREA DE HOSTS / TAGS
+ ÁREA DE HOSTS SECTS
 ============================= */
 .hosts-container {
   position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  border: 1px solid #444;
-  background-color: #272727;
+  border: 1px solid black;
+  background-color: black;
   padding: 4px 8px;
   min-height: 40px;
   width: 100%;
@@ -141,11 +133,11 @@ button.cancel {
 .chip {
   display: flex;
   align-items: center;
-  background-color: #464646;
+  background-color: #a5a5a5;
   border-radius: 4px;
   padding: 4px 8px;
   margin-right: 4px;
-  color: white;
+  color: black;
   font-size: 14px;
 }
 
@@ -163,7 +155,7 @@ button.cancel {
   flex-grow: 1;
   background: transparent;
   border: none;
-  color: white;
+  color: black;
   padding: 8px 0;
   min-width: 120px;
   outline: none;
@@ -177,7 +169,7 @@ button.cancel {
   top: 100%;
   left: 0;
   width: 100%;
-  background-color: #333;
+  background-color: #ffffff;
   border: 1px solid #444;
   max-height: 200px;
   overflow-y: auto;
@@ -189,7 +181,7 @@ button.cancel {
 .suggestion-item {
   padding: 8px 12px;
   cursor: pointer;
-  color: white;
+  color: black;
 }
 
 .suggestion-item:hover {
@@ -201,7 +193,7 @@ button.cancel {
 ============================= */
 .select-button {
   background-color: #333;
-  color: white;
+  color: black;
   border: 1px solid #444;
   padding: 8px 16px;
   margin-left: 10px;
@@ -215,7 +207,7 @@ button.cancel {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  background-color: #272727;
+  background-color: #ffffff;
   border: 1px solid #444;
   border-radius: 4px;
   padding: 4px 8px;
@@ -234,7 +226,7 @@ button.cancel {
   padding: 4px 8px;
   margin-right: 4px;
   margin-bottom: 2px;
-  color: #fff;
+  color: #000000;
   font-size: 14px;
 }
 
@@ -242,15 +234,16 @@ button.cancel {
   margin-left: 8px;
   cursor: pointer;
   font-weight: bold;
-  color: #aaa;
+  color: #000000;
 }
 
+/*  Campo onde digita o host */
 #hosts-input {
   flex: 1 1 120px;
   min-width: 120px;
   background: transparent;
   border: none;
-  color: #fff;
+  color: #000000;
   padding: 8px 0;
   outline: none;
   font-size: 14px;
@@ -272,19 +265,19 @@ button.cancel {
   max-height: 200px;
   overflow-y: auto;
   z-index: 10;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+ 
   display: none;
 }
 
 .suggestion-item {
   padding: 8px 12px;
   cursor: pointer;
-  color: #fff;
+  color: #ccc9c9;
   font-size: 14px;
 }
 
 .suggestion-item:hover {
-  background-color: #444;
+  background-color: #080808;
 }
 
 /* =============================
@@ -292,7 +285,7 @@ button.cancel {
 ============================= */
 .close {
   font-size: 18px;
-  font-weight: bold;
+
   color: #ffffff;
   cursor: pointer;
   margin-left: 8px;

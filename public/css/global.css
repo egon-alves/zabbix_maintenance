@@ -1,0 +1,24 @@
+body {
+  background-color: #a1a1a1;
+  color: Black;
+  font-family: Arial, sans-serif, 12px;
+}
+
+
+.container {
+  width: 100%;
+  margin:center;
+  margin: 20;
+  border-radius: 8px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: auto; /* ou defina uma largura específica se necessário */
+  padding: 10px; /* opcional: espaço interno */
+  z-index: 1000; /* opcional: para garantir que fique visível acima de outros elementos */
+}
