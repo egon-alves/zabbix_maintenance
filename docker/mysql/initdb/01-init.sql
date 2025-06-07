@@ -1,10 +1,10 @@
+CREATE DATABASE maintenance;
+USE maintenance;
+
 CREATE USER 'maintenance_web'@'%' IDENTIFIED BY 'maintenancepassword';
 GRANT ALL PRIVILEGES ON maintenance.* TO 'maintenance_web'@'%';
 FLUSH PRIVILEGES;
--- Criação do Banco de Dados
-CREATE DATABASE maintenance;
 
-use maintenance;
 -- Tabela principal
 CREATE TABLE janela_manutencao (
     id INT PRIMARY KEY AUTO_INCREMENT,
