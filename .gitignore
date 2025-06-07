@@ -1,9 +1,7 @@
 node_modules/
 db/
-compose.yaml
-node_modules/
-npm-debug.log
-Dockerfile
-.dockerignore
-node_modules/maintenance
-config/pass.env
+old/
+doc.md
+.gitignore
+package-lock.json
+*.md
